@@ -15,7 +15,7 @@ public class SPTrules
 		public int compare(Job o1, Job o2)
 		{
 			// TODO 自动生成的方法存根
-			return (int) (o1.getDurTime()-o2.getDurTime());
+			return (o1.getDurTime()-o2.getDurTime());
 		}
 	}
 	public static void setPriority(Machine M)
