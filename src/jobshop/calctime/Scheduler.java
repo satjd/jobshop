@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
+import jobshop.algorithm.hrules.RandomSPTrules;
 import jobshop.algorithm.hrules.SPTrules;
 
 
@@ -49,6 +50,8 @@ class Scheduler
 	
 	private static void initMachineSet(int mchCnt)  //初始化机器集合
 	{
+		machineSet.clear(); //清空机器集合
+		
 		for(int i=0;i<mchCnt;i++)
 		{
 			Machine m = new Machine(i);
@@ -75,7 +78,7 @@ class Scheduler
 				//System.out.println();
 			}
 			
-			SPTrules.setPriority(m);
+			RandomSPTrules.setPriority(m);
 			m.setMachineBuffer();
 			machineSet.add(m);
 			
@@ -84,18 +87,19 @@ class Scheduler
 	
 	private static void initCurStep(int jobCnt)
 	{
+		curStep.clear(); //清空过程记录矩阵
 		for(int i=1;i<=jobCnt;i++)
 			curStep.add(0);
 	}
 	
 	public static long calcTime() throws FileNotFoundException
 	{
-		int mchCnt = 4;
-		int jobCnt = 6;
-		int stepCnt = 4;
+		int mchCnt = 12;
+		int jobCnt = 15;
+		int stepCnt = 12;
 		PriorityQueue<Event> pq = new PriorityQueue<Event>();
-		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt", 
-											"E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt");
+		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt", 
+											"E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt");
 //		for(Iterator<ArrayList<Integer>> it = jobSet.iterator();it.hasNext();)
 //		{
 //			for(Iterator<Integer> init = it.next().iterator();init.hasNext();)
@@ -105,6 +109,7 @@ class Scheduler
 //			System.out.println();
 //		}
 		
+		Trigger.resetTrigger(); //重置触发器
 		initMachineSet(mchCnt); //初始化机器集合
 		initCurStep(jobCnt); //初始化加工程度数组
 		
@@ -120,8 +125,12 @@ class Scheduler
 	{
 		// TODO 自动生成的方法存根
 		
-		long time = calcTime();
-		System.out.println("总调度时间是："+time);
+		for(int i=1;i<=100;i++)
+		{
+			long time = calcTime();
+			System.out.println("总调度时间是："+time);
+		}
+		
 	}
 
 }

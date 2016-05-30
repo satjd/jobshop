@@ -23,6 +23,12 @@ class Trigger
 	private static SystemClock sc = new SystemClock(0);
 	private static long maxTime = 0; //触发器接受到的最晚JOB_RELEASED事件发生的时间
 	
+	public static void resetTrigger()
+	{
+		sc = new SystemClock(0);
+		maxTime = 0;
+	}
+	
 	public static long getCurrentTime()
 	{
 		return sc.getTime();
