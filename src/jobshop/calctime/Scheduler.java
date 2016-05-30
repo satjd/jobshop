@@ -90,12 +90,12 @@ class Scheduler
 	
 	public static long calcTime() throws FileNotFoundException
 	{
-		int mchCnt = 12;
-		int jobCnt = 15;
-		int stepCnt = 12;
+		int mchCnt = 4;
+		int jobCnt = 6;
+		int stepCnt = 4;
 		PriorityQueue<Event> pq = new PriorityQueue<Event>();
-		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt", 
-											"E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt");
+		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt", 
+											"E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt");
 //		for(Iterator<ArrayList<Integer>> it = jobSet.iterator();it.hasNext();)
 //		{
 //			for(Iterator<Integer> init = it.next().iterator();init.hasNext();)

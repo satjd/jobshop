@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import jobshop.calctime.*;
+import jobshop.calctime.Job;
+import jobshop.calctime.Machine;
 
-public class SPTrules
+public class FIFOrules
 {	
 	private static class Rule implements Comparator<Job>
 	{
-
 		@Override
 		public int compare(Job o1, Job o2)
 		{
 			// TODO 自动生成的方法存根
-			return o1.getDurTime()-o2.getDurTime();
+			return o1.getJobID()-o2.getJobID();
 		}
 	}
 	public static void setPriority(Machine M)
