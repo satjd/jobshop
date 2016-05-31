@@ -83,7 +83,7 @@ public class Scheduler
 				//System.out.println();
 			}
 			
-			new WSPTrules(0.9).setPriority(m);
+			new RandomSPTrules().setPriority(m);
 			m.setMachineBuffer();
 			machineSet.add(m);
 			
@@ -108,14 +108,12 @@ public class Scheduler
 			curStep.add(0);
 	}
 	
-	public static long calcTime() throws FileNotFoundException
+	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
+								String testcase_pcd,String testcase_time) throws FileNotFoundException
 	{
-		int mchCnt = 4;
-		int jobCnt = 6;
-		int stepCnt = 4;
 		PriorityQueue<Event> pq = new PriorityQueue<Event>();
-		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt", 
-											"E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt");
+		inputData(mchCnt, jobCnt, stepCnt, testcase_pcd, 
+											testcase_time);
 //		for(Iterator<ArrayList<Integer>> it = jobSet.iterator();it.hasNext();)
 //		{
 //			for(Iterator<Integer> init = it.next().iterator();init.hasNext();)
@@ -137,14 +135,13 @@ public class Scheduler
 		return Trigger.getMaxTime();
 	}
 	
-	public static long calcTime(Chromosome cm,ArrayList<AbstractRules> ruleList) throws FileNotFoundException
+	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
+								String testcase_pcd,String testcase_time,
+								Chromosome cm,ArrayList<AbstractRules> ruleList) throws FileNotFoundException
 	{
-		int mchCnt = 12;
-		int jobCnt = 15;
-		int stepCnt = 12;
 		PriorityQueue<Event> pq = new PriorityQueue<Event>();
-		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt", 
-											"E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt");
+		inputData(mchCnt, jobCnt, stepCnt, testcase_pcd, 
+											testcase_time);
 //		for(Iterator<ArrayList<Integer>> it = jobSet.iterator();it.hasNext();)
 //		{
 //			for(Iterator<Integer> init = it.next().iterator();init.hasNext();)
@@ -169,10 +166,15 @@ public class Scheduler
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		// TODO 自动生成的方法存根
+		int mchCnt = 4;
+		int jobCnt = 6;
+		int stepCnt = 4;
+		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt";
+		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt"; 
 		
 		for(int i=1;i<=100;i++)
 		{
-			long time = calcTime();
+			long time = calcTime(4,6,4,testcase_pcd,testcase_time);
 			System.out.println("总调度时间是："+time);
 		}
 		

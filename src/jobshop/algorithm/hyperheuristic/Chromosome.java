@@ -41,13 +41,15 @@ public class Chromosome implements Comparable<Chromosome>
 		return genes;
 	}
 	
+	public void resetFitness()
+	{
+		fitness = 0;
+	}
+	
 	public double getFitness() throws FileNotFoundException
 	{
 		if(fitness==0)
-		{
-			//System.out.println(FitnessCalc.calcFitness(this));
-			return FitnessCalc.calcFitness(this);
-		}
+			fitness = FitnessCalc.calcFitness(this);
 		return fitness;
 	}
 
@@ -58,7 +60,8 @@ public class Chromosome implements Comparable<Chromosome>
 		int result =0;
 		try
 		{
-			result = (int)(this.getFitness()-o.getFitness());
+			if(this.getFitness()>o.getFitness()) result = 1;
+			else result = -1;
 		}
 		catch (FileNotFoundException e)
 		{
@@ -66,5 +69,18 @@ public class Chromosome implements Comparable<Chromosome>
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public String toString()
+	{
+		String s = new String();
+		s+="[";
+		for(Integer i:genes)
+		{
+			s+=(i+" ");
+		}
+		s+="]";
+		
+		return s;
 	}
 }

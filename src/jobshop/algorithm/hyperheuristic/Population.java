@@ -1,7 +1,6 @@
 package jobshop.algorithm.hyperheuristic;
 
 import java.io.FileNotFoundException;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 public class Population
@@ -40,6 +39,14 @@ public class Population
 	public LinkedList<Chromosome> getPopulation()
 	{
 		return population;
+	}
+	
+	public void resetPopulation()
+	{
+		for(Chromosome cm:population)
+		{
+			cm.resetFitness();
+		}
 	}
 	
 	public double getFittest() throws FileNotFoundException

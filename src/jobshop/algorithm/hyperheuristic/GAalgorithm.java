@@ -24,6 +24,7 @@ public class GAalgorithm
 		Collections.sort(population);
 		
 		System.out.println("最优适应度:"+fittest+" 最优时间:"+(1.0/fittest)+"种群规模"+population.size());
+		System.out.println("最优染色体: "+population.getLast()+"===="+population.getLast().getFitness());
 		Chromosome mid = population.get((int)(population.size()*selectRate));
 		
 		for(Chromosome cm:population)
@@ -83,6 +84,7 @@ public class GAalgorithm
 	
 	public static Population nextGeneration(Population ori) throws FileNotFoundException
 	{
+		ori.resetPopulation();
 		Random r = new Random();
 		//选择
 		select(ori);
@@ -105,10 +107,11 @@ public class GAalgorithm
 		}
 		
 		//变异
-		for(Chromosome cm:origenes)
-		{
-			mutate(cm);
-		}
+//		for(Chromosome cm:origenes)
+//		{
+//			mutate(cm);
+//		}
+		
 		
 		return ori;
 	}
@@ -117,7 +120,7 @@ public class GAalgorithm
 	{
 		// TODO 自动生成的方法存根
 		int iterations = 100;
-		Population p = new Population(100, 12, 5);
+		Population p = new Population(100, FitnessCalc.mchCnt, FitnessCalc.ruleCnt);
 		for(int i=1;i<=iterations;i++)
 		{
 			System.out.print(i+":  ");
