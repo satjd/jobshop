@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 import jobshop.calctime.*;
 
-public class SPTrules
+public class SPTrules implements AbstractRules
 {	
 	private static class Rule implements Comparator<Job>
 	{
@@ -18,7 +18,7 @@ public class SPTrules
 			return o1.getDurTime()-o2.getDurTime();
 		}
 	}
-	public static void setPriority(Machine M)
+	public void setPriority(Machine M)
 	{
 		ArrayList<Job> joblist = M.getInstanceOfPriority();
 		Collections.sort(joblist, new Rule());

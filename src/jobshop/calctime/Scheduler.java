@@ -7,11 +7,16 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
+import jobshop.algorithm.hrules.AbstractRules;
+import jobshop.algorithm.hrules.LWKRrules;
+import jobshop.algorithm.hrules.MWKRrules;
 import jobshop.algorithm.hrules.RandomSPTrules;
 import jobshop.algorithm.hrules.SPTrules;
+import jobshop.algorithm.hrules.WSPTrules;
+import jobshop.algorithm.hyperheuristic.Chromosome;
 
 
-class Scheduler
+public class Scheduler
 {
 	//时间矩阵,工序矩阵,工序编号矩阵 
 	private static ArrayList<ArrayList<Integer>> jobSet = new ArrayList<ArrayList<Integer>>();
@@ -78,10 +83,21 @@ class Scheduler
 				//System.out.println();
 			}
 			
-			RandomSPTrules.setPriority(m);
+			new WSPTrules(0.9).setPriority(m);
 			m.setMachineBuffer();
 			machineSet.add(m);
 			
+		}
+	}
+	
+	private static void initMachineSet(int mchCnt,Chromosome cm,ArrayList<AbstractRules> ruleList)
+	{
+		initMachineSet(mchCnt);
+		for(int i=0;i<mchCnt;i++)
+		{
+			Machine curMachine = machineSet.get(i);
+			ArrayList<Integer> gene = cm.getGenes();
+			ruleList.get(gene.get(i)).setPriority(curMachine);
 		}
 	}
 	
@@ -93,6 +109,35 @@ class Scheduler
 	}
 	
 	public static long calcTime() throws FileNotFoundException
+	{
+		int mchCnt = 4;
+		int jobCnt = 6;
+		int stepCnt = 4;
+		PriorityQueue<Event> pq = new PriorityQueue<Event>();
+		inputData(mchCnt, jobCnt, stepCnt, "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt", 
+											"E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt");
+//		for(Iterator<ArrayList<Integer>> it = jobSet.iterator();it.hasNext();)
+//		{
+//			for(Iterator<Integer> init = it.next().iterator();init.hasNext();)
+//			{
+//				System.out.print(init.next()+" ");
+//			}
+//			System.out.println();
+//		}
+		
+		Trigger.resetTrigger(); //重置触发器
+		initMachineSet(mchCnt); //初始化机器集合
+		initCurStep(jobCnt); //初始化加工程度数组
+		
+		for(int i=0;i<jobCnt;i++)
+			pq.add(new Event(Event.StatusSet.NEW_JOB_ARRIVED,0,0,i));
+		
+		while(Trigger.next(pq, jobSet, timeSet, jobidSet, machineSet, curStep));
+		
+		return Trigger.getMaxTime();
+	}
+	
+	public static long calcTime(Chromosome cm,ArrayList<AbstractRules> ruleList) throws FileNotFoundException
 	{
 		int mchCnt = 12;
 		int jobCnt = 15;
@@ -110,7 +155,7 @@ class Scheduler
 //		}
 		
 		Trigger.resetTrigger(); //重置触发器
-		initMachineSet(mchCnt); //初始化机器集合
+		initMachineSet(mchCnt,cm,ruleList); //初始化机器集合
 		initCurStep(jobCnt); //初始化加工程度数组
 		
 		for(int i=0;i<jobCnt;i++)

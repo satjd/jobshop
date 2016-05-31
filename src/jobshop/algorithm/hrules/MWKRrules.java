@@ -7,7 +7,7 @@ import java.util.Comparator;
 import jobshop.calctime.Job;
 import jobshop.calctime.Machine;
 
-public class FIFOrules
+public class MWKRrules implements AbstractRules
 {	
 	private static class Rule implements Comparator<Job>
 	{
@@ -18,7 +18,7 @@ public class FIFOrules
 			return o1.getJobID()-o2.getJobID();
 		}
 	}
-	public static void setPriority(Machine M)
+	public void setPriority(Machine M)
 	{
 		ArrayList<Job> joblist = M.getInstanceOfPriority();
 		Collections.sort(joblist, new Rule());

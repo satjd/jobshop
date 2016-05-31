@@ -7,8 +7,9 @@ import java.util.Comparator;
 import jobshop.calctime.Job;
 import jobshop.calctime.Machine;
 
-public class WSPTrules
+public class WSPTrules implements AbstractRules
 {	
+	double weight;
 	private static class Rule implements Comparator<Job>
 	{
 		private double weight;
@@ -26,7 +27,14 @@ public class WSPTrules
 			return (int)(100.0*((weight*(o1.getJobID()-o2.getJobID())+(1.0-weight)*(o1.getDurTime()-o2.getDurTime()))));
 		}
 	}
-	public static void setPriority(Machine M,double weight)
+	
+	public WSPTrules(double weight)
+	{
+		// TODO 自动生成的构造函数存根
+		this.weight = weight;
+	}
+	
+	public void setPriority(Machine M)
 	{
 		ArrayList<Job> joblist = M.getInstanceOfPriority();
 		Collections.sort(joblist, new Rule(weight));

@@ -18,7 +18,7 @@ class SystemClock
 	}
 }
 
-class Trigger
+public class Trigger
 {
 	private static SystemClock sc = new SystemClock(0);
 	private static long maxTime = 0; //触发器接受到的最晚JOB_RELEASED事件发生的时间
@@ -125,7 +125,8 @@ class Trigger
 					ne = new Event(Event.StatusSet.JOB_RELEASED, e.getEventTime()+curJobTime, curMachine, curPart);
 					pq.add(ne);
 					machineSet.get(curMachine).setMachineStatus(Machine.StatusSet.PROCESSING);
-					System.out.println(curMachine+"机器"+"在"+e.getEventTime()+"s加工"+curPart+"号工件"+"用时"+curJobTime);
+					//------PRINT-------
+					//System.out.println(curMachine+"机器"+"在"+e.getEventTime()+"s加工"+curPart+"号工件"+"用时"+curJobTime);
 				}
 				else if(machineSet.get(curMachine).getMachineStatus()==Machine.StatusSet.PROCESSING)
 				{

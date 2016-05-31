@@ -1,7 +1,7 @@
 package jobshop.calctime;
 
 
-class Event implements Comparable<Event>
+public class Event implements Comparable<Event>
 {
 	//定义事件的状态集合
 	public static enum StatusSet{NEW_JOB_ARRIVED,JOB_SETUP,JOB_RELEASED};
