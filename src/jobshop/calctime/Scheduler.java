@@ -204,11 +204,11 @@ public class Scheduler
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		// TODO 自动生成的方法存根
-		int mchCnt = 12;
-		int jobCnt = 15;
-		int stepCnt = 12;
-		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt";
-		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt"; 
+		int mchCnt = 20;
+		int jobCnt = 50;
+		int stepCnt = 20;
+		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case6_pcd.txt";
+		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case6_time.txt"; 
 		
 		for(int i=1;i<=1;i++)
 		{

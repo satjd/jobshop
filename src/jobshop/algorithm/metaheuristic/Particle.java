@@ -17,20 +17,59 @@ public class Particle
 	{
 		private Machine m;
 		private int indexOfMachine;
+		private ArrayList<Job> jobPriority;
+		private ArrayList<Job> copyPriority;
+		private ArrayList<Machine> mSet;
 		JobPrioirtySetter(Machine m)
 		{
 			this.m = m;
-			indexOfMachine = machineSet.indexOf(m);
+			mSet = Particle.this.machineSet;
+			indexOfMachine = Particle.this.machineSet.indexOf(m);
+			jobPriority = m.getInstanceOfPriority();
+			copyPriority = new ArrayList<Job>(jobPriority);
+			//jobPriority = m.getInstanceOfPriority();
+			
+//			System.out.println("1-------------------"+indexOfMachine);
+//			System.out.println(mSet);
+//			for(Job i:mSet.get(0).getInstanceOfPriority())
+//			{
+//				System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum()+"===="+machineSet.get(0).getInstanceOfPriority().indexOf(i));
+//			}
+//			System.out.println("1-------------------");
+			
 		}
+		
 		
 		@Override
 		public int compare(Job o1, Job o2)
 		{
 			// TODO 自动生成的方法存根
-			ArrayList<Job> jobPriority = m.getInstanceOfPriority();
 			if(o1.equals(o2)) return 0;
-			if (wArray.get(indexOfMachine).get(jobPriority.indexOf(o1))
-					<wArray.get(indexOfMachine).get(jobPriority.indexOf(o2)))
+			//System.out.println(""+(mSet==Particle.this.machineSet)+" "+o1.getJobID()+" "+o2.getJobID()+"--->"+jobPriority.contains(o1));
+//			if(mSet.get(0).getInstanceOfPriority().indexOf(o1)==-1) 
+//			{
+//				System.out.println("2-------------------"+indexOfMachine);
+//				System.out.println(mSet);
+//				for(Job i:mSet.get(0).getInstanceOfPriority())
+//				{
+//					System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum()+"===="+machineSet.get(0).getInstanceOfPriority().indexOf(i));
+//				}
+//				System.out.println("2-------------------");
+//				System.out.println(indexOfMachine+" "+o1.getJobID()+" "+o1.getDurTime()+" "+jobPriority.indexOf(o1));
+//			}
+//			if(mSet.get(0).getInstanceOfPriority().indexOf(o2)==-1)
+//			{
+//				System.out.println("2-------------------");
+//				System.out.println(mSet);
+//				for(Job i:mSet.get(0).getInstanceOfPriority())
+//				{
+//					System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum()+"===="+machineSet.get(0).getInstanceOfPriority().indexOf(i));
+//				}
+//				System.out.println("2-------------------");
+//				System.out.println(indexOfMachine+" "+o2.getJobID()+" "+o2.getDurTime()+" "+jobPriority.indexOf(o2));
+//			}
+			if (Particle.this.wArray.get(indexOfMachine).get(Particle.JobPrioirtySetter.this.copyPriority.indexOf(o1))
+					<Particle.this.wArray.get(indexOfMachine).get(Particle.JobPrioirtySetter.this.copyPriority.indexOf(o2)))
 				return 1;
 			return -1;
 		}
@@ -50,23 +89,35 @@ public class Particle
 		this.machineSet = machineSet;
 		this.wArray = new ArrayList<ArrayList<Double>>();
 		this.curV = new ArrayList<ArrayList<Double>>();
+		Random r = new Random();
 		
 		ArrayList<Double> tmpLw = new ArrayList<Double>();
 		ArrayList<Double> tmpLc = new ArrayList<Double>();
 		for(int i=0;i<arraySize;i++)
 		{
-			tmpLw.add((double)i);
+			tmpLw.add((r.nextDouble()*i));
 			tmpLc.add(0.0);
 		}
 		
 		for(Machine m:machineSet)
 		{
-			Collections.shuffle(tmpLw);
 			wArray.add(tmpLw);
+			//Collections.shuffle(tmpLw);
 			curV.add(tmpLc);
 		}
 			
+		
+		System.out.println("-------------------");
+		for(Job i:machineSet.get(0).getInstanceOfPriority())
+		{
+			System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum()+"===="
+								+machineSet.get(0).getInstanceOfPriority().indexOf(i));
+		}
+		System.out.println("-------------------");
+		
 		updateMachineSet();
+		
+		
 	}
 	
 	public ArrayList<Machine> getMachineSet()
@@ -78,7 +129,9 @@ public class Particle
 	{
 		for(Machine m:machineSet)
 		{
-			Collections.sort(m.getInstanceOfPriority(), new JobPrioirtySetter(m));
+			Particle.JobPrioirtySetter jobPrioritySetter = this.new JobPrioirtySetter(m);
+			//Collections.sort(m.getInstanceOfPriority(), jobPrioritySetter);
+			m.getInstanceOfPriority().sort(jobPrioritySetter);
 		}
 	}
 	
@@ -116,7 +169,7 @@ public class Particle
 				curArray.set(j, tmp+curArray.get(j)); //更新位置
 			}
 		}
-		System.out.println("("+wArray.get(0).get(0)+","+wArray.get(0).get(1)+")");
+		//System.out.println("("+wArray.get(0).get(0)+","+wArray.get(0).get(1)+")");
 		updateMachineSet(); //更新对应机器的工序优先级
 	}
 }

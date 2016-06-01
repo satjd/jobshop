@@ -13,7 +13,7 @@ public class PSOalgorithm
 		// TODO 自动生成的方法存根
 		
 		int maxIteration = 1000;   //迭代次数
-		int swarmSize = 30;       //微粒个数
+		int swarmSize = 150;       //微粒个数
 		double c1 = 1.0, c2 = 1.0; //加速因子
 		
 		ArrayList<Particle> swarm = new ArrayList<Particle>();
@@ -57,7 +57,6 @@ public class PSOalgorithm
 				Particle p = swarm.get(i);
 				Particle pbest = pbestList.get(i);
 				p.fly(pbest, gbest, 2.0, 2.0);
-				ArrayList<ArrayList<Double>> al = p.getWArray();
 			}
 		}
 	}

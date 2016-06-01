@@ -33,6 +33,10 @@ public class Machine
 	{
 		this.machineID = id;
 	}
+	public long getMachineID()
+	{
+		return machineID;
+	}
 	public ArrayList<Job> getInstanceOfPriority()
 	{
 		return jobPriority;
@@ -58,5 +62,12 @@ public class Machine
 	public StatusSet getMachineStatus()
 	{
 		return machineStatus;
+	}
+	
+	public boolean equals(Object o)
+	{
+		Machine m = (Machine)o;
+		if(machineID==m.getMachineID()) return true;
+		return false;
 	}
 }

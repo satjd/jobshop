@@ -14,11 +14,11 @@ import jobshop.calctime.Scheduler;
 public class FitnessCalc
 {
 	public static int ruleCnt = 4;
-	public static int mchCnt = 12;
-	private static int jobCnt = 15;
-	private static int stepCnt = 12;
-	private static String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt";
-	private static String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt";
+	public static int mchCnt = 20;
+	private static int jobCnt = 50;
+	private static int stepCnt = 20;
+	private static String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case6_pcd.txt";
+	private static String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case6_time.txt";
 	
 	private static ArrayList<AbstractRules> ruleList = new ArrayList<AbstractRules>(); //启发式规则的集合
 	static

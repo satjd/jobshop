@@ -26,7 +26,7 @@ public class Job
 	public boolean equals(Object j)
 	{
 		Job job = (Job)j;
-		if(job.getDurTime()==jobDurTime&&job.getJobID()==jobID)
+		if(job.getJobID()==this.getJobID())
 		{
 			return true;
 		}
