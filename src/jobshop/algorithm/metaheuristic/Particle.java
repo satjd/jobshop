@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import jobshop.calctime.Job;
 import jobshop.calctime.Machine;
@@ -40,6 +39,7 @@ public class Particle
 	
 	
 	private int arraySize; //微粒位置向量每台机器分量的大小
+	private double fitness = 0;
 	private ArrayList<Machine> machineSet;  //微粒对应的机器集合
 	private ArrayList<ArrayList<Double>> wArray; //微粒的位置（向量各个分量权值 的向量）
 	private ArrayList<ArrayList<Double>> curV; //微粒的速度
@@ -79,7 +79,6 @@ public class Particle
 		for(Machine m:machineSet)
 		{
 			Collections.sort(m.getInstanceOfPriority(), new JobPrioirtySetter(m));
-			//m.setMachineBuffer();
 		}
 	}
 	
@@ -101,6 +100,7 @@ public class Particle
 	public void fly(Particle pBest,Particle gBest,double c1,double c2) //微粒迭代
 	{
 		Random r = new Random();
+		double rand = r.nextDouble();
 		for(int i=0;i<curV.size();i++)
 		{
 			ArrayList<Double> v = curV.get(i); //速度的分量
@@ -111,12 +111,12 @@ public class Particle
 			for(int j=0;j<v.size();j++)
 			{
 				double tmp = v.get(j);
-				double rand = r.nextDouble();
 				tmp += c1*rand*(pbesti.get(j)-curArray.get(j)) + c2*rand*(gbesti.get(j)-curArray.get(j));
 				v.set(j, tmp); //更新速度
 				curArray.set(j, tmp+curArray.get(j)); //更新位置
 			}
 		}
+		System.out.println("("+wArray.get(0).get(0)+","+wArray.get(0).get(1)+")");
 		updateMachineSet(); //更新对应机器的工序优先级
 	}
 }

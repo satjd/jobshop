@@ -43,12 +43,12 @@ public class Machine
 	}
 	public void setMachineBuffer()
 	{
-		System.out.println("-------------------");
-		for(Job i:jobPriority)
-		{
-			System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum());
-		}
-		System.out.println("-------------------");
+//		System.out.println("-------------------");
+//		for(Job i:jobPriority)
+//		{
+//			System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum());
+//		}
+//		System.out.println("-------------------");
 		machineBuffer = new PriorityQueue<Job>(new JobComparator(jobPriority));
 	}
 	public void setMachineStatus(StatusSet machineStatus)
