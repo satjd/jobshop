@@ -14,6 +14,8 @@ import jobshop.algorithm.hrules.RandomSPTrules;
 import jobshop.algorithm.hrules.SPTrules;
 import jobshop.algorithm.hrules.WSPTrules;
 import jobshop.algorithm.hyperheuristic.Chromosome;
+import jobshop.algorithm.metaheuristic.FitnessCalc;
+import jobshop.algorithm.metaheuristic.Particle;
 
 
 public class Scheduler
@@ -21,7 +23,7 @@ public class Scheduler
 	//时间矩阵,工序矩阵,工序编号矩阵 
 	private static ArrayList<ArrayList<Integer>> jobSet = new ArrayList<ArrayList<Integer>>();
 	private static ArrayList<ArrayList<Integer>> timeSet = new ArrayList<ArrayList<Integer>>();
-	private static ArrayList<ArrayList<Integer>> jobidSet = new ArrayList<ArrayList<Integer>>();
+	public static ArrayList<ArrayList<Integer>> jobidSet = new ArrayList<ArrayList<Integer>>();
 	//机器集合,工件加工程度数组
 	private static ArrayList<Machine> machineSet = new ArrayList<Machine>();
 	private static ArrayList<Integer> curStep = new ArrayList<Integer>();
@@ -83,7 +85,7 @@ public class Scheduler
 				//System.out.println();
 			}
 			
-			new RandomSPTrules().setPriority(m);
+			new SPTrules().setPriority(m);
 			m.setMachineBuffer();
 			machineSet.add(m);
 			
@@ -106,6 +108,14 @@ public class Scheduler
 		curStep.clear(); //清空过程记录矩阵
 		for(int i=1;i<=jobCnt;i++)
 			curStep.add(0);
+	}
+	
+	public static Particle getParticleFromMachineSet() throws FileNotFoundException
+	{
+		if(jobSet.size()==0)
+			inputData(FitnessCalc.mchCnt, FitnessCalc.jobCnt, FitnessCalc.stepCnt, FitnessCalc.testcase_pcd, FitnessCalc.testcase_time);
+		initMachineSet(FitnessCalc.mchCnt);
+		return new Particle(FitnessCalc.jobCnt,machineSet);
 	}
 	
 	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
@@ -132,6 +142,34 @@ public class Scheduler
 		
 		while(Trigger.next(pq, jobSet, timeSet, jobidSet, machineSet, curStep));
 		
+		return Trigger.getMaxTime();
+	}
+	
+	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
+			String testcase_pcd,String testcase_time,Particle pt) throws FileNotFoundException
+	{
+		PriorityQueue<Event> pq = new PriorityQueue<Event>();
+//		inputData(mchCnt, jobCnt, stepCnt, testcase_pcd, 
+//				testcase_time);
+		
+		//for(Iterator<ArrayList<Integer>> it = jobSet.iterator();it.hasNext();)
+		//{
+		//for(Iterator<Integer> init = it.next().iterator();init.hasNext();)
+		//{
+		//System.out.print(init.next()+" ");
+		//}
+		//System.out.println();
+		//}
+
+		Trigger.resetTrigger(); //重置触发器
+		//initMachineSet(mchCnt); //初始化机器集合
+		initCurStep(jobCnt); //初始化加工程度数组
+
+		for(int i=0;i<jobCnt;i++)
+			pq.add(new Event(Event.StatusSet.NEW_JOB_ARRIVED,0,0,i));
+
+		while(Trigger.next(pq, jobSet, timeSet, jobidSet, pt.getMachineSet() , curStep));
+
 		return Trigger.getMaxTime();
 	}
 	
@@ -166,15 +204,15 @@ public class Scheduler
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		// TODO 自动生成的方法存根
-		int mchCnt = 4;
-		int jobCnt = 6;
-		int stepCnt = 4;
-		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt";
-		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt"; 
+		int mchCnt = 12;
+		int jobCnt = 15;
+		int stepCnt = 12;
+		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt";
+		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt"; 
 		
-		for(int i=1;i<=100;i++)
+		for(int i=1;i<=1;i++)
 		{
-			long time = calcTime(4,6,4,testcase_pcd,testcase_time);
+			long time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time);
 			System.out.println("总调度时间是："+time);
 		}
 		

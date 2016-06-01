@@ -39,9 +39,10 @@ public class Trigger
 		return maxTime;
 	}
 	
-	private static int getPartnumByID(int id,ArrayList<ArrayList<Integer>> idset)
+	public static int getPartnumByID(int id)
 	{
 		int index = 0;
+		ArrayList<ArrayList<Integer>> idset = Scheduler.jobidSet; 
 		for(Iterator<ArrayList<Integer>> it= idset.iterator();it.hasNext();index++)
 		{
 			ArrayList<Integer> a  = it.next();
@@ -118,7 +119,7 @@ public class Trigger
 //				}
 				curJob = curBuffer.poll();
 				curJobTime = curJob.getDurTime();
-				int curPart = getPartnumByID(curJob.getJobID(),jobidSet);
+				int curPart = getPartnumByID(curJob.getJobID());
 				
 				if(machineSet.get(curMachine).getMachineStatus()==Machine.StatusSet.IDLE)
 				{
