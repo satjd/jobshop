@@ -1,20 +1,22 @@
 package jobshop.algorithm.metaheuristic;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import jobshop.calctime.Scheduler;
+import jobshop.output.xls.OutputXls;
 
 public class PSOalgorithm
 {
-
-	public static void main(String[] args) throws FileNotFoundException
+	public static ArrayList<Double> result = new ArrayList<Double>();
+	public static void main(String[] args) throws IOException
 	{
 		// TODO 自动生成的方法存根
 		
 		int maxIteration = 1000;   //迭代次数
-		int swarmSize = 150;       //微粒个数
-		double c1 = 1.0, c2 = 1.0; //加速因子
+		int swarmSize = 30;       //微粒个数
+		double c1 = 2.0, c2 = 2.0; //加速因子
 		
 		ArrayList<Particle> swarm = new ArrayList<Particle>();
 		ArrayList<Particle> pbestList = new ArrayList<Particle>();
@@ -49,8 +51,9 @@ public class PSOalgorithm
 				}
 			}
 			
-			//------PRINT------
+			//------PRINT&SAVE------
 			System.out.println(iter+": gbest="+gbestFitness+"  time="+(1.0/gbestFitness));
+			result.add(1.0/gbestFitness);
 			
 			for(int i=0;i<swarm.size();i++)
 			{
@@ -59,6 +62,9 @@ public class PSOalgorithm
 				p.fly(pbest, gbest, 2.0, 2.0);
 			}
 		}
+		
+		//------OUTPUT------
+		OutputXls.outputResultToXLS(result);
 	}
 
 }

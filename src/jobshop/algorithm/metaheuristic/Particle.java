@@ -95,14 +95,14 @@ public class Particle
 		ArrayList<Double> tmpLc = new ArrayList<Double>();
 		for(int i=0;i<arraySize;i++)
 		{
-			tmpLw.add((r.nextDouble()*i));
+			tmpLw.add((double)i);
 			tmpLc.add(0.0);
 		}
 		
 		for(Machine m:machineSet)
 		{
 			wArray.add(tmpLw);
-			//Collections.shuffle(tmpLw);
+			Collections.shuffle(tmpLw);
 			curV.add(tmpLc);
 		}
 			
