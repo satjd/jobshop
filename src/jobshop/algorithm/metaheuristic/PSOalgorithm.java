@@ -7,16 +7,30 @@ import java.util.ArrayList;
 import jobshop.calctime.Scheduler;
 import jobshop.output.xls.OutputXls;
 
+/*
+ * PSOalgorithm.java
+ * 
+ * PSOalgorithm类          实现及测试PSO算法的类
+ * 		ArrayList<Double> gbestList   记录每一代的gbest，便于存入Excel
+ * 		main函数用来测试PSO算法
+ * 			其中 maxIteration---->最大迭代数
+ * 			   swarmSize   ---->微粒的个数
+ *             c1,c2       ---->参数
+ *             inertia     ---->惯性权重
+ */
+
+
 public class PSOalgorithm
 {
-	public static ArrayList<Double> result = new ArrayList<Double>();
+	public static ArrayList<Double> gbestList = new ArrayList<Double>();  //记录每一代的gbest，便于存入Excel
 	public static void main(String[] args) throws IOException
 	{
 		// TODO 自动生成的方法存根
 		
-		int maxIteration = 1000;   //迭代次数
+		int maxIteration = 2000;  //迭代次数
 		int swarmSize = 30;       //微粒个数
-		double c1 = 2.0, c2 = 2.0; //加速因子
+		double c1 = 2.8, c2 = 1.3;//加速因子
+		double inertia = 1.0;     //惯性权重
 		
 		ArrayList<Particle> swarm = new ArrayList<Particle>();
 		ArrayList<Particle> pbestList = new ArrayList<Particle>();
@@ -53,18 +67,26 @@ public class PSOalgorithm
 			
 			//------PRINT&SAVE------
 			System.out.println(iter+": gbest="+gbestFitness+"  time="+(1.0/gbestFitness));
-			result.add(1.0/gbestFitness);
+			gbestList.add(1.0/gbestFitness);
+			
+			//---------------------
+			
 			
 			for(int i=0;i<swarm.size();i++)
 			{
 				Particle p = swarm.get(i);
 				Particle pbest = pbestList.get(i);
-				p.fly(pbest, gbest, 2.0, 2.0);
+				//p.hybridFly(pbest, gbest,inertia,c1,c2,0.6);
+				p.fly(pbest, gbest, inertia, c1, c2);
 			}
 		}
 		
 		//------OUTPUT------
-		OutputXls.outputResultToXLS(result);
+		OutputXls.outputResultToXLS("E:\\Java codes\\workspace\\jobshop\\result\\EXP2.xls","PSOgbest",gbestList);
+		
+		
+		System.gc();
+		
 	}
 
 }

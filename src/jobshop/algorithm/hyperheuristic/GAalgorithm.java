@@ -9,23 +9,40 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
 
+/*
+ * GAalgorithm.java
+ * 
+ * 	GAalgorithm 实现和测试GA算法
+ * 		void select(Population p)                     对一个population进行选择操作
+ * 		void mutate(Chromosome cm)                    对一个chromosome进行变异操作
+ * 		void crossover(Chromosome cm1,Chromosome cm2) 对两个chromosome进行交叉操作
+ * 		void main()                                   测试GA算法
+ */
+
+
+
 public class GAalgorithm
 {
-	public static final double crossoverRate = 0.9; //交叉率
+	public static final int    populationSize = 10;//种群规模
+	public static final double crossoverRate = 0.5; //交叉率
 	public static final double mutateRate = 0.01;   //变异率
 	public static final double selectRate = 0.3;    //淘汰率
+	public static final int    selectTime = 10;     //轮盘赌的次数（防止种群死光）
+	
+	public static Chromosome globalBestCm = null; 
 	
 	private static void select(Population p) throws FileNotFoundException   //选择
 	{
-		double fittest = p.getFittest();
+		Chromosome fittestCm = p.getFittest();
+		globalBestCm = fittestCm.getFitness()>globalBestCm.getFitness()?fittestCm:globalBestCm;
 		double sumFitness = 0;
 		Random r = new Random();
 		LinkedList<Chromosome> population = p.getPopulation();
-		Collections.sort(population);
 		
-		System.out.println("最优适应度:"+fittest+" 最优时间:"+(1.0/fittest)+"种群规模"+population.size());
-		System.out.println("最优染色体: "+population.getLast()+"===="+population.getLast().getFitness());
-		Chromosome mid = population.get((int)(population.size()*selectRate));
+		System.out.println("全局最优适应度:"+globalBestCm.getFitness()+" 全局最优时间:"+(1.0/globalBestCm.getFitness())+"种群规模"+population.size());
+		
+		System.out.println("全局最优染色体: "+globalBestCm+"===="+globalBestCm.getFitness());
+		System.out.println("这一代的最优染色体: "+fittestCm+"===="+fittestCm.getFitness());
 		
 		for(Chromosome cm:population)
 		{
@@ -35,14 +52,15 @@ public class GAalgorithm
 		for(Iterator<Chromosome> it = population.iterator();it.hasNext();)
 		{
 			Chromosome cur = it.next();
-//			if(r.nextDouble()>=(cur.getFitness()/sumFitness)) //轮盘赌
-//			{
-//				it.remove();
-//			}
-			if(cur.getFitness()<mid.getFitness())
+			boolean isSaved = false;
+			for(int i=1;i<=selectTime;i++)
 			{
-				it.remove();
+				if(r.nextDouble()<=(cur.getFitness()/sumFitness)) //轮盘赌
+				{
+					isSaved = true;
+				}
 			}
+			if(!isSaved) it.remove();
 		}
 	}
 	
@@ -69,7 +87,7 @@ public class GAalgorithm
 		
 		for(int i=0;i<gene1.size();i++)
 		{
-			if(r.nextDouble()<=crossoverRate)
+			if(r.nextDouble()<=0.5)
 			{
 				newGene.set(i, gene1.get(i));
 			}
@@ -89,28 +107,35 @@ public class GAalgorithm
 		//选择
 		select(ori);
 		
-		//交叉
+		//交叉(random crossover)
 		LinkedList<Chromosome>  origenes = ori.getPopulation();
-		Chromosome cm1 = null;
-		Chromosome cm2 = null;
-		for(ListIterator<Chromosome> it = origenes.listIterator();it.hasNext();)
+		while(origenes.size()<populationSize)
 		{
-			Chromosome cur = it.next();
-			if(r.nextDouble()<=0.333) cm1 = cur;
-			if(r.nextDouble()<=0.333) cm2 = cur;
-			if(cm1!=null&&cm2!=null) 
-			{
-				it.add(crossOver(cm1, cm2));
-				cm1 = null;
-				cm2 = null;
-			}
+			Chromosome cm1 = origenes.get(r.nextInt(origenes.size()));
+			Chromosome cm2 = origenes.get(r.nextInt(origenes.size()));
+			origenes.add(crossOver(cm1, cm2));
 		}
 		
-		//变异
-//		for(Chromosome cm:origenes)
+		
+//		for(ListIterator<Chromosome> it = origenes.listIterator();it.hasNext();)
 //		{
-//			mutate(cm);
+//			Chromosome cur = it.next();
+//			if(r.nextDouble()<=1.0) cm1 = cur;
+//			if(r.nextDouble()<=1.0) cm2 = cur;
+//			if(cm1!=null&&cm2!=null) 
+//			{
+//				it.add(crossOver(cm1, cm2));
+//				cm1 = null;
+//				cm2 = null;
+//			}
 //		}
+		
+		
+		//变异
+		for(Chromosome cm:origenes)
+		{
+			mutate(cm);
+		}
 		
 		
 		return ori;
@@ -120,11 +145,13 @@ public class GAalgorithm
 	{
 		// TODO 自动生成的方法存根
 		int iterations = 100;
-		Population p = new Population(100, FitnessCalc.mchCnt, FitnessCalc.ruleCnt);
+		Population p = new Population(populationSize, FitnessCalc.mchCnt, FitnessCalc.ruleCnt);
+		globalBestCm = p.getFittest();
 		for(int i=1;i<=iterations;i++)
 		{
 			System.out.print(i+":  ");
 			p = nextGeneration(p);
+			System.gc();
 		}
 	}
 

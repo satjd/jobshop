@@ -5,6 +5,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+
+/*
+ * Chromosome.java
+ * 
+ * 	Chromosome类   用来描述染色体，即种群中的个体信息
+ * 		ArrayList<Integer> genes   基因编码
+ * 		int length                 基因长度
+ * 		int bound                  基因编码的取值范围
+ * 		double fitness             基因适应度
+ */
+
+
+
 public class Chromosome implements Comparable<Chromosome>
 {
 	private ArrayList<Integer> genes;
@@ -73,14 +86,6 @@ public class Chromosome implements Comparable<Chromosome>
 	
 	public String toString()
 	{
-		String s = new String();
-		s+="[";
-		for(Integer i:genes)
-		{
-			s+=(i+" ");
-		}
-		s+="]";
-		
-		return s;
+		return genes.toString();
 	}
 }

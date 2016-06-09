@@ -10,6 +10,21 @@ import java.util.Random;
 import jobshop.calctime.Job;
 import jobshop.calctime.Machine;
 
+/*
+ * Particle.java
+ * 	Particle$JobPrioritySetter类    Particle的成员内部类，用来通过向量设置每台机器工序优先级的比较器
+ * 	
+ * 	Particle类      描述了一个粒子的具体信息
+ * 		int arraySize;                          //微粒位置向量每台机器分量的大小
+ *		double fitness = 0;                     //微粒的适应度
+ *		ArrayList<Machine> machineSet;          //微粒对应的机器集合
+ *		ArrayList<ArrayList<Double>> wArray;    //微粒的位置（向量各个分量权值 的向量）
+ *		ArrayList<ArrayList<Double>> curV;      //微粒的速度
+ * 		void fly(Particle pBest,Particle gBest,double inertia,double c1,double c2) //微粒迭代
+ * 			微粒迭代的具体公式：  v = v + c1*rand*pbest + c2*rand*gbest -----> rand为[0,1]的随机浮点数，c1,c2为固定的参数（加速因子）
+ */
+
+
 public class Particle
 {
 	
@@ -78,7 +93,7 @@ public class Particle
 	
 	
 	private int arraySize; //微粒位置向量每台机器分量的大小
-	private double fitness = 0;
+	private double fitness = 0; //微粒的适应度
 	private ArrayList<Machine> machineSet;  //微粒对应的机器集合
 	private ArrayList<ArrayList<Double>> wArray; //微粒的位置（向量各个分量权值 的向量）
 	private ArrayList<ArrayList<Double>> curV; //微粒的速度
@@ -96,13 +111,13 @@ public class Particle
 		for(int i=0;i<arraySize;i++)
 		{
 			tmpLw.add((double)i);
-			tmpLc.add(0.0);
+			tmpLc.add((double)r.nextInt(2));
 		}
 		
 		for(Machine m:machineSet)
 		{
-			wArray.add(tmpLw);
 			Collections.shuffle(tmpLw);
+			wArray.add(tmpLw);
 			curV.add(tmpLc);
 		}
 			
@@ -150,7 +165,7 @@ public class Particle
 		return wArray;
 	}
 	
-	public void fly(Particle pBest,Particle gBest,double c1,double c2) //微粒迭代
+	public void fly(Particle pBest,Particle gBest,double inertia,double c1,double c2) //微粒迭代
 	{
 		Random r = new Random();
 		double rand = r.nextDouble();
@@ -163,13 +178,67 @@ public class Particle
 			
 			for(int j=0;j<v.size();j++)
 			{
-				double tmp = v.get(j);
+				double tmp = v.get(j)*inertia;
+				//计算下一代的速度     根据  v = v + c1*rand*pbest + c2*rand*gbest
 				tmp += c1*rand*(pbesti.get(j)-curArray.get(j)) + c2*rand*(gbesti.get(j)-curArray.get(j));
+				
 				v.set(j, tmp); //更新速度
 				curArray.set(j, tmp+curArray.get(j)); //更新位置
 			}
 		}
 		//System.out.println("("+wArray.get(0).get(0)+","+wArray.get(0).get(1)+")");
+		
 		updateMachineSet(); //更新对应机器的工序优先级
+	}
+	
+	public void hybridFly(Particle pBest,Particle gBest,double inertia,double c1,double c2,double w)
+	{
+		Random r = new Random();
+		double rand = r.nextDouble();
+		for(int i=0;i<curV.size();i++)
+		{
+			ArrayList<Double> v = curV.get(i); //速度的分量
+			ArrayList<Double> curArray = wArray.get(i); //位置的分量
+			ArrayList<Double> pbesti = pBest.getWArray().get(i); //pbest对应位置分量
+			ArrayList<Double> gbesti = gBest.getWArray().get(i); //gbest对应位置分量
+			
+			for(int k=0;k<curArray.size();k++)
+			{
+				int indexInBest = 0;
+				double j1 = 0,j2 = 0;
+				if(r.nextDouble()<c1)
+				{
+					indexInBest = pbesti.indexOf(curArray.get(k));
+				}
+				else if(r.nextDouble()<c1+c2)
+				{
+					indexInBest = gbesti.indexOf(curArray.get(k));
+				}
+				if(v.get(k)==0&&v.get(k)==v.get(indexInBest))
+				{
+					j1 = curArray.get(k);
+					j2 = curArray.get(indexInBest);
+					curArray.set(indexInBest,j1);
+					curArray.set(k, j2);
+					v.set(k, 1.0);
+				}
+				
+				
+				//update velocity
+				for(double vi:v)
+				{
+					if(vi==1)
+					{
+						vi = r.nextDouble()<w?0:1;
+					}
+				}
+			}
+			
+			
+		}
+		//System.out.println("("+wArray.get(0).get(0)+","+wArray.get(0).get(1)+")");
+		
+		updateMachineSet(); //更新对应机器的工序优先级
+		
 	}
 }

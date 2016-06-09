@@ -18,6 +18,36 @@ import jobshop.algorithm.metaheuristic.FitnessCalc;
 import jobshop.algorithm.metaheuristic.Particle;
 
 
+
+/*
+ * Scheduler.java
+ * Scheduler类:
+ * 	
+ * 	jobSet：    工序对应的二维数组，从文件读入
+ * 	timeSet： 加工时间对应的二维数组，从文件读入
+ * 	jobidSet：对每个工序分配了一个唯一识别码jobid，用于区分在同一机器上的不同工作，也用于表示工作的先后顺序
+ * 	machineSet：机器（Machine）类的对象集合
+ * 	curStep：  记录了加工过程，实际上为每个工件下一道加工工序的实际编号
+ * 
+ * 	void inputData(int mchCnt,int jobCnt,int stepCnt,String fileNameJobset,String fileNameTimeset)：从文件中读入数据
+ * 	void initMachineSet(int mchCnt,AbstractRules rule)： 初始化机器集合，按启发式规则制定优先级向量
+ * 	void initMachineSet(int mchCnt,Chromosome cm,ArrayList<AbstractRules> ruleList)：初始化机器集合，按染色体和底层规则库制定优先级
+ * 	Particle getParticleFromMachineSet()：通过机器集合得到对应粒子，用于PSO算法中
+ * 	void initCurStep(int jobCnt)：初始化过程记录矩阵
+ * 	long calcTime(int mchCnt,int jobCnt,int stepCnt,
+ *								String testcase_pcd,String testcase_time,AbstractRules rule)：解出某一个启发式规则对应的加工调度时间和具体调度方案
+ *
+ * 	long calcTime(int mchCnt,int jobCnt,int stepCnt,
+ *			String testcase_pcd,String testcase_time,Particle pt)：解出某一个确定的微粒对应的加工时间和对应方案
+ * 	long calcTime(int mchCnt,int jobCnt,int stepCnt,
+ *								String testcase_pcd,String testcase_time,
+ *								Chromosome cm,ArrayList<AbstractRules> ruleList)：解出某一个染色体对应的加工时间和对应方案
+ * 
+ * 
+ * 
+ * 
+ */
+
 public class Scheduler
 {
 	//时间矩阵,工序矩阵,工序编号矩阵 
@@ -44,7 +74,7 @@ public class Scheduler
 			{
 				if(jobin.hasNextInt()&&timein.hasNextInt())
 				{
-					jobLine.add(jobin.nextInt() - 1);
+					jobLine.add(jobin.nextInt()-1);
 					timeLine.add(timein.nextInt());
 					idline.add(id++);
 				}
@@ -55,7 +85,8 @@ public class Scheduler
 		}	
 	}
 	
-	private static void initMachineSet(int mchCnt)  //初始化机器集合
+	//初始化机器集合，按启发式规则制定优先级向量
+	private static void initMachineSet(int mchCnt,AbstractRules rule) 
 	{
 		machineSet.clear(); //清空机器集合
 		
@@ -85,16 +116,17 @@ public class Scheduler
 				//System.out.println();
 			}
 			
-			new SPTrules().setPriority(m);
+			rule.setPriority(m);
 			m.setMachineBuffer();
 			machineSet.add(m);
 			
 		}
 	}
 	
+	//初始化机器集合，按染色体和底层规则库制定优先级
 	private static void initMachineSet(int mchCnt,Chromosome cm,ArrayList<AbstractRules> ruleList)
 	{
-		initMachineSet(mchCnt);
+		initMachineSet(mchCnt,new SPTrules());
 		for(int i=0;i<mchCnt;i++)
 		{
 			Machine curMachine = machineSet.get(i);
@@ -103,6 +135,7 @@ public class Scheduler
 		}
 	}
 	
+	//初始化过程记录矩阵
 	private static void initCurStep(int jobCnt)
 	{
 		curStep.clear(); //清空过程记录矩阵
@@ -110,16 +143,19 @@ public class Scheduler
 			curStep.add(0);
 	}
 	
+	//通过机器集合得到对应粒子，用于PSO算法中
 	public static Particle getParticleFromMachineSet() throws FileNotFoundException
 	{
 		if(jobSet.size()==0)
 			inputData(FitnessCalc.mchCnt, FitnessCalc.jobCnt, FitnessCalc.stepCnt, FitnessCalc.testcase_pcd, FitnessCalc.testcase_time);
-		initMachineSet(FitnessCalc.mchCnt);
+		initMachineSet(FitnessCalc.mchCnt,new SPTrules());
 		return new Particle(FitnessCalc.jobCnt,machineSet);
 	}
 	
+	
+	//解出某一个启发式规则对应的加工调度时间和具体调度方案
 	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
-								String testcase_pcd,String testcase_time) throws FileNotFoundException
+								String testcase_pcd,String testcase_time,AbstractRules rule) throws FileNotFoundException
 	{
 		PriorityQueue<Event> pq = new PriorityQueue<Event>();
 		inputData(mchCnt, jobCnt, stepCnt, testcase_pcd, 
@@ -134,7 +170,7 @@ public class Scheduler
 //		}
 		
 		Trigger.resetTrigger(); //重置触发器
-		initMachineSet(mchCnt); //初始化机器集合
+		initMachineSet(mchCnt,rule); //初始化机器集合
 		initCurStep(jobCnt); //初始化加工程度数组
 		
 		for(int i=0;i<jobCnt;i++)
@@ -145,6 +181,7 @@ public class Scheduler
 		return Trigger.getMaxTime();
 	}
 	
+	//解出某一个确定的微粒对应的加工时间和对应方案
 	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
 			String testcase_pcd,String testcase_time,Particle pt) throws FileNotFoundException
 	{
@@ -173,6 +210,7 @@ public class Scheduler
 		return Trigger.getMaxTime();
 	}
 	
+	//解出某一个染色体对应的加工时间和对应方案
 	public static long calcTime(int mchCnt,int jobCnt,int stepCnt,
 								String testcase_pcd,String testcase_time,
 								Chromosome cm,ArrayList<AbstractRules> ruleList) throws FileNotFoundException
@@ -204,17 +242,18 @@ public class Scheduler
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		// TODO 自动生成的方法存根
-		int mchCnt = 20;
-		int jobCnt = 50;
-		int stepCnt = 20;
-		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case6_pcd.txt";
-		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case6_time.txt"; 
-		
+		int mchCnt = 4;
+		int jobCnt = 6;
+		int stepCnt = 4;
+		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt";
+		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt"; 
+		long t = System.currentTimeMillis();
 		for(int i=1;i<=1;i++)
 		{
-			long time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time);
+			long time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new SPTrules()); 
 			System.out.println("总调度时间是："+time);
 		}
+		System.out.println(System.currentTimeMillis()-t);
 		
 	}
 

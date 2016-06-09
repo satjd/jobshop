@@ -2,7 +2,23 @@ package jobshop.algorithm.metaheuristic;
 
 import java.io.FileNotFoundException;
 
+/*
+ * FitnessCalc.java
+ * 	metaheuristic.FitnessCalc类    封装了对于PSO算法的适应度计算函数
+ * 		各个字段描述了输入数据文件的位置以及用例的相关信息
+ * 		double calcFitness(Particle pt) 根据个体微粒内的调度方案计算个体适应度
+ */
+
 import jobshop.calctime.Scheduler;
+
+/*
+ * metaheuristic.FitnessCalc.java
+ * 
+ * FitnessCalc类        封装了测试用例的相关数据，便于输入
+ * 		函数double calcFitness(Particle pt)用于计算个体适应度
+ */
+
+
 
 public class FitnessCalc
 {

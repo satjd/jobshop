@@ -4,12 +4,29 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/*
+ * Machine.java
+ * 
+ * JobComparator类           定义了在优先级队列中元素之间的优先关系
+ * 		jobPriority  优先级向量，用来描述优先级。在这个ArrayList中下表越小的元素优先级越高
+ * 
+ * Machine类         定义了机器对象
+ * 		enum StatusSet{PROCESSING,IDLE}  机器的状态集合：PROCESSING---->加工状态，IDLE---->闲置状态
+ * 		StatusSet machineStatus          机器的当前状态
+ * 		long machineID                   机器的唯一编号ID
+ * 		long machineIdleTime             机器在下一次闲置的时间节点
+ * 		ArrayList<Job> jobPriority		   对于一台机器的工件优先级，由特定的算法生成
+ * 		PriorityQueue<Job> machineBuffer 机器的缓冲区，当job发生抢占时进行优先级选择
+ */
+
+
+
+
 class JobComparator implements Comparator<Job>
 {
 	private ArrayList<Job> jobPriority;
 	public JobComparator(ArrayList<Job> jobPriority)
 	{
-		// TODO 自动生成的构造函数存根
 		this.jobPriority = jobPriority;
 	}
 	@Override
@@ -25,7 +42,8 @@ public class Machine
 {
 	public static enum StatusSet{PROCESSING,IDLE} //机器的状态集合
 	private StatusSet machineStatus = StatusSet.IDLE;
-	private long machineID;
+	private long machineID;    //机器的序号
+	private long machineIdleTime = 1; //机器在下一次闲置的时间节点
 	private ArrayList<Job> jobPriority = new ArrayList<Job>(); //对于一台机器的工件优先级，由特定的算法生成
 	private PriorityQueue<Job> machineBuffer; //机器的缓冲区，当job发生抢占时进行优先级选择
 	
@@ -36,6 +54,14 @@ public class Machine
 	public long getMachineID()
 	{
 		return machineID;
+	}
+	public long getMachineIdleTime()
+	{
+		return machineIdleTime;
+	}
+	public void setMachineIdleTime(long time)
+	{
+		this.machineIdleTime = time;
 	}
 	public ArrayList<Job> getInstanceOfPriority()
 	{

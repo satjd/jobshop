@@ -1,5 +1,15 @@
 package jobshop.calctime;
 
+/*
+ * Job.java
+ * 
+ * 	Job类       描述了工序的信息
+ * 		int jobID       每个工序的唯一识别码ID
+ * 		int jobDurTime  工序对应的加工时间
+ * 		int partNum     这个工序属于哪个工件
+ */
+
+
 public class Job
 {
 	private int jobID;

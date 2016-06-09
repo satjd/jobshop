@@ -13,17 +13,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class OutputXls
 {
-	public static void outputResultToXLS(ArrayList<Double> list) throws IOException
+	private static Workbook wb = new HSSFWorkbook();
+	public static <T> void outputResultToXLS(String xlsPath,String description,ArrayList<T> list) throws IOException
 	{
-		Workbook wb = new HSSFWorkbook();
-		FileOutputStream fileOut = new FileOutputStream("E:\\Java codes\\workspace\\jobshop\\result\\EXP2.xls");
+		FileOutputStream fileOut = new FileOutputStream(xlsPath);
 		
-		Sheet s1 = wb.createSheet("Sheet 1");
+		Sheet s1 = wb.createSheet(description);
 		int index = 0;
-		for(Double d:list)
+		for(T d:list)
 		{
 			Row row = s1.createRow(index++);
-			row.createCell(0).setCellValue(d);
+			row.createCell(0).setCellValue((double) d);
 		}
 		
 		wb.write(fileOut);
