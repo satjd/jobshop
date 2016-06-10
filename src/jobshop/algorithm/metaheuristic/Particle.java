@@ -122,13 +122,13 @@ public class Particle
 		}
 			
 		
-		System.out.println("-------------------");
-		for(Job i:machineSet.get(0).getInstanceOfPriority())
-		{
-			System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum()+"===="
-								+machineSet.get(0).getInstanceOfPriority().indexOf(i));
-		}
-		System.out.println("-------------------");
+//		System.out.println("-------------------");
+//		for(Job i:machineSet.get(0).getInstanceOfPriority())
+//		{
+//			System.out.println(i.getJobID()+"===="+i.getDurTime()+"======="+i.getPartNum()+"===="
+//								+machineSet.get(0).getInstanceOfPriority().indexOf(i));
+//		}
+//		System.out.println("-------------------");
 		
 		updateMachineSet();
 		

@@ -42,6 +42,6 @@ public class FitnessCalc
 	}
 	public static double calcFitness(Chromosome cho) throws FileNotFoundException //计算个体适应度
 	{
-		return 1.0/(Scheduler.calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,cho, ruleList));
+		return 1.0/(Scheduler.calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,cho, ruleList)-1);
 	}
 }

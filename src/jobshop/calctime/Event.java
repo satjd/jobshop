@@ -8,7 +8,7 @@ package jobshop.calctime;
  * 		enum StatusSet{NEW_JOB_ARRIVED,JOB_SETUP,JOB_RELEASED}  定义了事件的状态集合
  * 			NEW_JOB_ARRIVED---->  新工作到来，用于初始化整个加工过程
  * 			JOB_SETUP      ---->  工作可以从机器缓冲区中取出，是否可以加工取决于机器的状态是否为闲置状态
- * 			JOB_RELEASED   ---->  工作完成，从机器上释放
+ * 			JOB_RELEASED   ---->  工作完成，将工件从机器上释放
  * 		StatusSet eventStatus 机器的当前状态
  * 		int eventTime  事件的发生时间
  * 		int machineNum 事件对应的机器ID

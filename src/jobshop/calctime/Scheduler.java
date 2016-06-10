@@ -242,16 +242,16 @@ public class Scheduler
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		// TODO 自动生成的方法存根
-		int mchCnt = 4;
-		int jobCnt = 6;
-		int stepCnt = 4;
-		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_pcd.txt";
-		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case2_time.txt"; 
+		int mchCnt = 12;
+		int jobCnt = 15;
+		int stepCnt = 12;
+		String testcase_pcd = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_pcd.txt";
+		String testcase_time = "E:\\Java codes\\workspace\\jobshop\\testcase\\case4_time.txt"; 
 		long t = System.currentTimeMillis();
 		for(int i=1;i<=1;i++)
 		{
-			long time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new SPTrules()); 
-			System.out.println("总调度时间是："+time);
+			long time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new SPTrules()); //按SPTrules规则调度 
+			System.out.println("总调度时间是："+(time-1));  //程序默认从1s开始加工，故此处需减去1s
 		}
 		System.out.println(System.currentTimeMillis()-t);
 		
