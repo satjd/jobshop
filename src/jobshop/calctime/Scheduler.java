@@ -252,6 +252,14 @@ public class Scheduler
 		{
 			long time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new SPTrules()); //按SPTrules规则调度 
 			System.out.println("总调度时间是："+(time-1));  //程序默认从1s开始加工，故此处需减去1s
+			time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new RandomSPTrules()); //按SPTrules规则调度 
+			System.out.println("总调度时间是："+(time-1));  //程序默认从1s开始加工，故此处需减去1s
+			time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new LWKRrules()); //按SPTrules规则调度 
+			System.out.println("总调度时间是："+(time-1));  //程序默认从1s开始加工，故此处需减去1s
+			time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new MWKRrules()); //按SPTrules规则调度 
+			System.out.println("总调度时间是："+(time-1));  //程序默认从1s开始加工，故此处需减去1s
+			time = calcTime(mchCnt,jobCnt,stepCnt,testcase_pcd,testcase_time,new WSPTrules(0.5)); //按SPTrules规则调度 
+			System.out.println("总调度时间是："+(time-1));  //程序默认从1s开始加工，故此处需减去1s
 		}
 		System.out.println(System.currentTimeMillis()-t);
 		

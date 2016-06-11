@@ -168,7 +168,6 @@ public class Particle
 	public void fly(Particle pBest,Particle gBest,double inertia,double c1,double c2) //微粒迭代
 	{
 		Random r = new Random();
-		double rand = r.nextDouble();
 		for(int i=0;i<curV.size();i++)
 		{
 			ArrayList<Double> v = curV.get(i); //速度的分量
@@ -180,7 +179,7 @@ public class Particle
 			{
 				double tmp = v.get(j)*inertia;
 				//计算下一代的速度     根据  v = v + c1*rand*pbest + c2*rand*gbest
-				tmp += c1*rand*(pbesti.get(j)-curArray.get(j)) + c2*rand*(gbesti.get(j)-curArray.get(j));
+				tmp += c1*r.nextDouble()*(pbesti.get(j)-curArray.get(j)) + c2*r.nextDouble()*(gbesti.get(j)-curArray.get(j));
 				
 				v.set(j, tmp); //更新速度
 				curArray.set(j, tmp+curArray.get(j)); //更新位置
@@ -240,5 +239,21 @@ public class Particle
 		
 		updateMachineSet(); //更新对应机器的工序优先级
 		
+	}
+	
+	public boolean equals(Object o)
+	{
+		Particle pt = (Particle)o;
+		boolean result = false;
+		try
+		{
+			result = this.getFitness()==pt.getFitness();
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

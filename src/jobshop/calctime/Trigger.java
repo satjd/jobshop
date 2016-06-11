@@ -176,7 +176,7 @@ public class Trigger     //触发器
 					machineSet.get(curMachine).setMachineStatus(Machine.StatusSet.PROCESSING);
 					
 					//------PRINT-------
-					//System.out.println(curMachine+"机器"+"在"+e.getEventTime()+"s加工"+curPart+"号工件"+"用时"+curJobTime);
+					//System.out.println(curMachine+"机器"+"在"+(e.getEventTime()-1)+"s加工"+curPart+"号工件"+"用时"+curJobTime);
 				}
 				else if(machineSet.get(curMachine).getMachineStatus()==Machine.StatusSet.PROCESSING)
 				{

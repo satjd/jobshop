@@ -29,7 +29,7 @@ public class PSOalgorithm
 		
 		int maxIteration = 2000;  //迭代次数
 		int swarmSize = 30;       //微粒个数
-		double c1 = 2.8, c2 = 1.3;//加速因子
+		double c1 = 2.8, c2 = 1.3;//加速因子 
 		double inertia = 1.0;     //惯性权重
 		
 		ArrayList<Particle> swarm = new ArrayList<Particle>();
@@ -43,6 +43,7 @@ public class PSOalgorithm
 		
 		double gbestFitness = 0;
 		Particle gbest = null;
+		long time = System.currentTimeMillis();
 		for(int iter=1;iter<=maxIteration;iter++) //开始迭代
 		{
 			for(int index=0;index<swarmSize;index++) //寻找pbest存入pbestList
@@ -82,6 +83,7 @@ public class PSOalgorithm
 		}
 		
 		//------OUTPUT------
+		System.out.println("用时"+(System.currentTimeMillis()-time));
 		OutputXls.outputResultToXLS("E:\\Java codes\\workspace\\jobshop\\result\\EXP2.xls","PSOgbest",gbestList);
 		
 		

@@ -1,6 +1,7 @@
 package jobshop.algorithm.hyperheuristic;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -8,6 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
+
+import jobshop.output.xls.OutputXls;
 
 /*
  * GAalgorithm.java
@@ -30,6 +33,7 @@ public class GAalgorithm
 	public static final int    selectTime = 10;     //轮盘赌的次数（防止种群死光）
 	
 	public static Chromosome globalBestCm = null; 
+	public static ArrayList<Double> size = new ArrayList<Double>();
 	
 	private static void select(Population p) throws FileNotFoundException   //选择
 	{
@@ -40,7 +44,7 @@ public class GAalgorithm
 		LinkedList<Chromosome> population = p.getPopulation();
 		
 		System.out.println("全局最优适应度:"+globalBestCm.getFitness()+" 全局最优时间:"+(1.0/globalBestCm.getFitness())+"种群规模"+population.size());
-		
+		size.add((double)population.size());
 		System.out.println("全局最优染色体: "+globalBestCm+"===="+globalBestCm.getFitness());
 		System.out.println("这一代的最优染色体: "+fittestCm+"===="+fittestCm.getFitness());
 		
@@ -141,8 +145,9 @@ public class GAalgorithm
 		return ori;
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException
+	public static void main(String[] args) throws IOException
 	{
+		long time = System.currentTimeMillis();
 		// TODO 自动生成的方法存根
 		int iterations = 100;
 		Population p = new Population(populationSize, FitnessCalc.mchCnt, FitnessCalc.ruleCnt);
@@ -153,6 +158,8 @@ public class GAalgorithm
 			p = nextGeneration(p);
 			System.gc();
 		}
+		System.out.println(System.currentTimeMillis()-time);
+		OutputXls.outputResultToXLS("E:\\Java codes\\workspace\\jobshop\\result\\EXP2.xls","size",size);
 	}
 
 }
